@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Accounts</title>
+<style>
+/* Fixed navigation buttons */
+.nav-back, .nav-logout {
+    position: fixed;
+    top: 20px;
+    z-index: 99999;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 16px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.92);
+    color: #000;
+    text-decoration: none;
+    font-size: 17px;
+    font-weight: 600;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.18);
+}
+.nav-back { left: 20px; }
+.nav-logout { right: 20px; }
+.nav-back:hover, .nav-logout:hover {
+    transform: translateY(-1px);
+    opacity: 0.9;
+}
+</style>
+</head>
+<body>
+    <a href="javascript:history.back()" class="nav-back">← Back</a>
+    <a href="{{ url_for('logout') }}" class="nav-logout">Logout</a>
+    <h1>All Signed Up Accounts</h1>
+    <ul>
+        {% for account in accounts %}
+            <li>{{ account.strip() }}</li>
+        {% endfor %}
+    </ul>
+    <br>
+    <a href="/">Back to Sign Up</a>
+</body>
+</html>

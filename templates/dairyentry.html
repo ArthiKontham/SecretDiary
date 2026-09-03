@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Diary Entry</title>
+    <style>
+        body {
+            background: linear-gradient(to bottom, #f5e0c3, #dcc5a2); /* Light brown theme */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+        }
+        .container {
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.15);
+            width: 80%;
+        }
+        h1 {
+            color: #6d4c41;
+            font-size: 34px;
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #a1887f;
+            font-size: 16px;
+            resize: none;
+        }
+        .buttons {
+            margin-top: 20px;
+        }
+        button {
+            background: linear-gradient(135deg, #a1887f, #8d6e63);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+            transition: transform 0.3s ease;
+        }
+        button:hover {
+            background: linear-gradient(135deg, #8d6e63, #a1887f);
+            transform: scale(1.1);
+        }
+        .calculator, .notification {
+            margin-top: 20px;
+            text-align: left;
+        }
+        input, select {
+            padding: 8px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #a1887f;
+        }
+        .back-button {
+    position: fixed;
+    top: 25px;
+    left: 30px;
+    z-index: 9999;
+
+    font-size: 20px;
+    text-decoration: none;
+    color: #000;
+}
+
+.logout-button {
+    position: fixed;
+    top: 25px;
+    right: 30px;
+    z-index: 9999;
+
+    font-size: 20px;
+    text-decoration: none;
+    color: #000;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Daily Diary Entry</h1>
+        <textarea id="diaryText" placeholder="Write your thoughts here..."></textarea>
+
+        <div class="buttons">
+            <button onclick="saveEntry()">Save Entry</button>
+            <button onclick="viewPreviousEntries()">View Previous Entries</button>
+        </div>
+
+        <div class="calculator">
+            <h2>Quick Calculator</h2>
+            <input type="text" id="calcInput" placeholder="Enter equation (e.g., 5+3)">
+            <button onclick="calculate()">Calculate</button>
+            <p id="calcResult"></p>
+        </div>
+
+        <div class="notification">
+            <h2>Set a Reminder</h2>
+            <label>Select Date:</label>
+            <input type="date" id="reminderDate">
+            <label>Select Time:</label>
+            <input type="time" id="reminderTime">
+            <button onclick="setReminder()">Set Notification</button>
+            <p id="reminderMessage"></p>
+        </div>
+    </div>
+
+    <script>
+        function saveEntry() {
+            const diaryText = document.getElementById("diaryText").value.trim();
+            if (diaryText === "") return;
+
+            const date = new Date().toLocaleDateString();
+            const entries = JSON.parse(localStorage.getItem("diaryEntries")) || [];
+            entries.push({ date, text: diaryText });
+
+            localStorage.setItem("diaryEntries", JSON.stringify(entries));
+            document.getElementById("diaryText").value = ""; // Clear input
+        }
+
+        function viewPreviousEntries() {
+            window.location.href = "previousentries.html"; // Navigate to previous entries page
+        }
+
+        function calculate() {
+            const input = document.getElementById("calcInput").value;
+            try {
+                const result = eval(input);
+                document.getElementById("calcResult").innerText = "Result: " + result;
+            } catch {
+                document.getElementById("calcResult").innerText = "Invalid equation!";
+            }
+        }
+
+        function setReminder() {
+            const date = document.getElementById("reminderDate").value;
+            const time = document.getElementById("reminderTime").value;
+            if (!date || !time) {
+                document.getElementById("reminderMessage").innerText = "Please select both date and time!";
+                return;
+            }
+
+            document.getElementById("reminderMessage").innerText = `Reminder set for ${date} at ${time}!`;
+        }
+    </script>
+</body>
+</html>

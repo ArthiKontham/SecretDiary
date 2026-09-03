@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Previous Entries</title>
+<style>body{font-family:Arial;background:linear-gradient(to bottom,#f5e0c3,#dcc5a2);min-height:100vh;margin:0;padding:30px}.top{display:flex;justify-content:space-between}.top a{background:#8d6e63;color:#fff;padding:9px 15px;border-radius:9px;text-decoration:none}.box{max-width:800px;margin:70px auto;background:#fff;padding:30px;border-radius:18px;box-shadow:0 10px 30px #0002}.entry{padding:18px;margin:12px 0;background:#fff8ef;border-radius:10px}.date{font-weight:bold;color:#6d4c41}.text{white-space:pre-wrap;margin-top:8px}
+/* Fixed navigation buttons */
+.nav-back, .nav-logout {
+    position: fixed;
+    top: 20px;
+    z-index: 99999;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 16px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.92);
+    color: #000;
+    text-decoration: none;
+    font-size: 17px;
+    font-weight: 600;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.18);
+}
+.nav-back { left: 20px; }
+.nav-logout { right: 20px; }
+.nav-back:hover, .nav-logout:hover {
+    transform: translateY(-1px);
+    opacity: 0.9;
+}
+    </style></head>
+<body><a href="javascript:history.back()" class="nav-back">← Back</a><a href="{{ url_for('logout') }}" class="nav-logout">Logout</a><div class="box"><h1>Previous Diary Entries</h1>{% if entries %}{% for entry in entries %}<div class="entry"><div class="date">{{ entry.entry_date }}</div><div class="text">{{ entry.entry_text }}</div></div>{% endfor %}{% else %}<p>No previous entries found.</p>{% endif %}</div></body></html>

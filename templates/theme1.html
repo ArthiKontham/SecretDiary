@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Secret Diary - Seasonal Themes</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: #d8b29b;
+      transition: background-color 0.3s, color 0.3s, background-image 0.3s ease-in-out;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    .container {
+      width: 80%;
+      max-width: 1200px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+      transform: scale(1);
+      transition: transform 0.3s ease;
+    }
+
+    .container:hover {
+      transform: scale(1.05);
+    }
+
+    h1 {
+      font-size: 40px;
+      color: #7f5f3d;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 30px;
+      font-weight: 700;
+      animation: fadeIn 1s ease-out;
+      text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .theme-button {
+      padding: 15px 20px;
+      background: linear-gradient(135deg, #a77f6d, #8c6e5a);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 18px;
+      transition: all 0.3s ease;
+      margin: 10px;
+      box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .theme-button:hover {
+      background: linear-gradient(135deg, #8c6e5a, #a77f6d);
+      box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.2);
+      transform: scale(1.05);
+    }
+
+    .footer {
+      margin-top: 30px;
+      font-size: 16px;
+      color: #7f5f3d;
+      opacity: 0.7;
+      transition: opacity 0.3s ease;
+    }
+
+    .footer:hover {
+      opacity: 1;
+    }
+
+    .user-icon {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 40px;
+      height: 40px;
+      background-image: url('/static/user-icon.png');
+      background-size: cover;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    .back-button {
+    position: fixed;
+    top: 25px;
+    left: 30px;
+    z-index: 9999;
+
+    font-size: 20px;
+    text-decoration: none;
+    color: #000;
+}
+
+.logout-button {
+    position: fixed;
+    top: 25px;
+    right: 30px;
+    z-index: 9999;
+
+    font-size: 20px;
+    text-decoration: none;
+    color: #000;
+}
+  
+/* Fixed navigation buttons */
+.nav-back, .nav-logout {
+    position: fixed;
+    top: 20px;
+    z-index: 99999;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 16px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.92);
+    color: #000;
+    text-decoration: none;
+    font-size: 17px;
+    font-weight: 600;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.18);
+}
+.nav-back { left: 20px; }
+.nav-logout { right: 20px; }
+.nav-back:hover, .nav-logout:hover {
+    transform: translateY(-1px);
+    opacity: 0.9;
+}
+    </style>
+</head>
+<body>
+    <a href="javascript:history.back()" class="nav-back">← Back</a>
+    <a href="{{ url_for('logout') }}" class="nav-logout">Logout</a>
+  <div class="user-icon"></div>
+
+  <div class="container">
+    <h1>Welcome to Secret Diary</h1>
+    <p>Choose a theme to match the season and personalize your diary experience.</p>
+
+    <button class="theme-button" onclick="selectTheme('light')">Light Theme</button>
+    <button class="theme-button" onclick="selectTheme('winter')">Winter Theme</button>
+    <button class="theme-button" onclick="selectTheme('spring')">Spring Theme</button>
+    <button class="theme-button" onclick="selectTheme('autumn')">Autumn Theme</button>
+    <button class="theme-button" onclick="selectTheme('summer')">Summer Theme</button>
+
+    <div class="footer">
+      <p>Select a theme and proceed to your diary!</p>
+    </div>
+  </div>
+
+  <script>
+    function selectTheme(theme) {
+      localStorage.setItem('selectedTheme', theme);
+      window.location.href = `/year${theme}`;
+    }
+  </script>
+</body>
+</html>

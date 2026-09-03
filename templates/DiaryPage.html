@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Diary Entry</title>
+
+    <style>
+        body {
+            margin: 0;
+            background: linear-gradient(to bottom, #f5e0c3, #dcc5a2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+
+        /* TOP BUTTONS */
+        .topbar {
+            position: fixed;
+            top: 50px;
+            left: 30px;
+            right: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .topbar a {
+            text-decoration: none;
+            background: #8d6e63;
+            color: white;
+            padding: 9px 15px;
+            border-radius: 9px;
+            font-size: 16px;
+            display: inline-block;
+        }
+
+        .topbar a:hover {
+            background: #6d4c41;
+        }
+
+        .container {
+            padding: 40px;
+            margin: 120px 20px 30px;
+            background: rgba(255,255,255,.92);
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,.15);
+            width: min(850px, 82%);
+        }
+
+        h1 {
+            color: #6d4c41;
+            font-size: 34px;
+        }
+
+        h2 {
+            color: #6d4c41;
+            margin-top: 30px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #a1887f;
+            font-size: 16px;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+
+        input {
+            padding: 10px;
+            border-radius: 7px;
+            border: 1px solid #a1887f;
+            font-size: 16px;
+        }
+
+        button {
+            background: linear-gradient(135deg,#a1887f,#8d6e63);
+            color: white;
+            padding: 10px 20px;
+            border: 0;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        button:hover {
+            transform: scale(1.03);
+        }
+
+        .message {
+            color: #2e7d32;
+            font-weight: bold;
+            margin: 10px;
+        }
+
+        .error {
+            color: #c62828;
+            font-weight: bold;
+            margin: 10px;
+        }
+
+        .section {
+            margin-top: 25px;
+        }
+
+        .links a {
+            color: #6d4c41;
+            margin: 0 8px;
+        }
+
+        @media(max-width:600px) {
+
+            .container {
+                padding: 25px 20px;
+                width: 88%;
+            }
+
+            .topbar {
+                top: 35px;
+                left: 15px;
+                right: 15px;
+            }
+
+            .topbar a {
+                font-size: 13px;
+                padding: 8px 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- BACK AND LOGIN BUTTONS -->
+    <div class="topbar">
+        <a href="javascript:history.back()">← Back</a>
+        <a href="{{ url_for('login') }}">Login</a>
+    </div>
+
+
+    <div class="container">
+
+        <h1>Daily Diary Entry</h1>
+
+        {% if selected_date %}
+            <p>
+                <strong>Selected Date:</strong> {{ selected_date }}
+            </p>
+        {% endif %}
+
+        {% if message %}
+            <div class="message">{{ message }}</div>
+        {% endif %}
+
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
+
+
+        <!-- DIARY ENTRY -->
+        <form method="POST" action="{{ url_for('submit_entry') }}">
+
+            <textarea
+                name="entry"
+                placeholder="Write your thoughts here..."
+                required>
+            </textarea>
+
+            <input
+                type="hidden"
+                name="entry_date"
+                value="{{ selected_date }}">
+
+            <div>
+                <button type="submit">Save Entry</button>
+            </div>
+
+        </form>
+
+
+        <!-- PREVIOUS ENTRIES -->
+        <div class="section">
+
+            <a href="{{ url_for('previous_entries') }}">
+                <button type="button">
+                    View Previous Entries
+                </button>
+            </a>
+
+        </div>
+
+
+        <!-- CALCULATOR -->
+        <div class="section">
+
+            <h2>Quick Calculator</h2>
+
+            <form
+                method="POST"
+                action="{{ url_for('save_calculation') }}"
+                id="calcForm">
+
+                <input
+                    type="text"
+                    id="calcInput"
+                    name="expression"
+                    placeholder="e.g. 5+3"
+                    required>
+
+                <input
+                    type="hidden"
+                    id="calcResult"
+                    name="result">
+
+                <button
+                    type="button"
+                    onclick="calculate()">
+                    Calculate
+                </button>
+
+                <span id="resultText"></span>
+
+            </form>
+
+        </div>
+
+
+        <!-- REMINDER -->
+        <div class="section">
+
+            <h2>Set a Reminder</h2>
+
+            <form
+                method="POST"
+                action="{{ url_for('save_reminder') }}">
+
+                <label>Select Date:</label>
+
+                <input
+                    type="date"
+                    name="reminder_date"
+                    required>
+
+                <label>Select Time:</label>
+
+                <input
+                    type="time"
+                    name="reminder_time"
+                    required>
+
+                <button type="submit">
+                    Set Notification
+                </button>
+
+            </form>
+
+            <p>
+                <a href="{{ url_for('reminders') }}">
+                    View Saved Reminders
+                </a>
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        function calculate() {
+
+            const input =
+                document.getElementById('calcInput').value.trim();
+
+            try {
+
+                if (!/^[0-9+\-*/().\s]+$/.test(input))
+                    throw new Error();
+
+                const result =
+                    Function('"use strict"; return (' + input + ')')();
+
+                if (!Number.isFinite(result))
+                    throw new Error();
+
+                document.getElementById('resultText').innerText =
+                    'Result: ' + result;
+
+                document.getElementById('calcResult').value =
+                    result;
+
+                document.getElementById('calcForm').submit();
+
+            } catch(e) {
+
+                document.getElementById('resultText').innerText =
+                    'Invalid equation!';
+
+            }
+
+        }
+
+    </script>
+
+</body>
+</html>

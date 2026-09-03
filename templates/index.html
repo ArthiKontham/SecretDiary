@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secret Diary - Sign In</title>
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0e1c6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+   
+        .container {
+            background-color: #fff4e1;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #b68e52;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #c5a780;
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: #fff3d1;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #b68e52;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #9e7b42;
+        }
+
+        .links {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .links a {
+            color: #b68e52;
+            text-decoration: none;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+        .back-button {
+    position: fixed;
+    top: 25px;
+    left: 30px;
+    z-index: 9999;
+
+    font-size: 20px;
+    text-decoration: none;
+    color: #000;
+}
+
+.logout-button {
+    position: fixed;
+    top: 25px;
+    right: 30px;
+    z-index: 9999;
+
+    font-size: 20px;
+    text-decoration: none;
+    color: #000;
+}
+    </style>
+</head>
+<body>
+        <div class="topbar">
+        <a href="javascript:history.back()">← Back</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+    <div class="container">
+        <h1>Sign In to Secret Diary</h1>
+        <form id="loginForm">
+            <input type="text" id="username" placeholder="Username" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+        <p class="links">Don't have an account? <a href="signup page.html">Sign Up</a></p>
+        <p class="error" id="errorMessage"></p>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("signinForm").addEventListener("submit", function(event) {
+                event.preventDefault();
+
+                const username = document.getElementById("username").value;
+                const password = document.getElementById("password").value;
+
+
+                const storedUsername = localStorage.getItem('username');
+                const storedPassword = localStorage.getItem('password');
+
+                if (username === storedUsername && password === storedPassword) {
+                    alert("Login successful!");
+                    window.location.href = "theme1.html";
+                } else {
+                    alert("Invalid username or password. Please try again.");
+                }
+            });
+        });
+    </script>
+</body>
+</html>

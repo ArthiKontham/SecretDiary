@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Day - Autumn Theme</title>
+    <style>
+        body {
+            background: linear-gradient(to bottom, #ceb092, #b35424);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+        }
+        .container {
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.2);
+            width: 80%;
+        }
+        h1 {
+            color: #b35900;
+            font-size: 34px;
+            margin-bottom: 20px;
+        }
+        .day-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            display: none;
+        }
+        .day-button {
+            background: linear-gradient(135deg, #d27951, #cc6633);
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+        .day-button:hover {
+            background: linear-gradient(135deg, #cc6633, #d27951);
+            transform: scale(1.1);
+        }
+        select {
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        .leaf {
+            position: absolute;
+            top: -10px;
+            color: #b35900;
+            font-size: 1em;
+            opacity: 0.8;
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+        .back-button {
+    position: fixed;
+    top: 25px;
+    left: 30px;
+    z-index: 9999;
+
+    font-size: 20px;
+    text-decoration: none;
+    color: #000;
+}
+
+.logout-button {
+    position: fixed;
+    top: 25px;
+    right: 30px;
+    z-index: 9999;
+
+    font-size: 20px;
+    text-decoration: none;
+    color: #000;
+}
+    
+/* Fixed navigation buttons */
+.nav-back, .nav-logout {
+    position: fixed;
+    top: 20px;
+    z-index: 99999;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 16px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.92);
+    color: #000;
+    text-decoration: none;
+    font-size: 17px;
+    font-weight: 600;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.18);
+}
+.nav-back { left: 20px; }
+.nav-logout { right: 20px; }
+.nav-back:hover, .nav-logout:hover {
+    transform: translateY(-1px);
+    opacity: 0.9;
+}
+    </style>
+</head>
+<body>
+    <a href="javascript:history.back()" class="nav-back">← Back</a>
+    <a href="{{ url_for('logout') }}" class="nav-logout">Logout</a>
+    <div class="container">
+        <h1>Select a Month & Day</h1>
+        <select id="monthSelector" onchange="setSelectedMonth()">
+            <option value="" selected disabled>Choose a Month</option>
+            <option>January</option>
+            <option>February</option>
+            <option>March</option>
+            <option>April</option>
+            <option>May</option>
+            <option>June</option>
+            <option>July</option>
+            <option>August</option>
+            <option>September</option>
+            <option>October</option>
+            <option>November</option>
+            <option>December</option>
+        </select>
+        <div class="day-list" id="dayList"></div>
+    </div>
+
+    <script>
+        function createFallingLeaves() {
+            const leaf = document.createElement('div');
+            leaf.classList.add('leaf');
+            const leafTypes = ['🍁'];
+            leaf.textContent = leafTypes[Math.floor(Math.random() * leafTypes.length)];
+            leaf.style.left = `${Math.random() * 100}vw`;
+            leaf.style.animationDuration = `${3 + Math.random() * 5}s`;
+            leaf.style.fontSize = `${10 + Math.random() * 20}px`;
+            document.body.appendChild(leaf);
+            setTimeout(() => leaf.remove(), 8000);
+        }
+
+        setInterval(createFallingLeaves, 300);
+
+        function getMonthDays(month, year) {
+            const monthDays = {
+                'January': 31,
+                'February': (year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0)) ? 29 : 28,
+                'March': 31,
+                'April': 30,
+                'May': 31,
+                'June': 30,
+                'July': 31,
+                'August': 31,
+                'September': 30,
+                'October': 31,
+                'November': 30,
+                'December': 31
+            };
+            return monthDays[month] || 0;
+        }
+
+        function setSelectedMonth() {
+            const selectedMonth = document.getElementById("monthSelector").value;
+            localStorage.setItem('selectedMonth', selectedMonth);
+            renderDays(selectedMonth);
+        }
+
+        function renderDays(month) {
+            if (!month) return;
+
+            const year = new Date().getFullYear(); 
+            const days = getMonthDays(month, year);
+            const dayListDiv = document.getElementById('dayList');
+            dayListDiv.innerHTML = "";
+            dayListDiv.style.display = "flex";
+
+            for (let i = 1; i <= days; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'day-button';
+                btn.textContent = i;
+                btn.onclick = () => selectDay(i);
+                dayListDiv.appendChild(btn);
+            }
+        }
+
+        function selectDay(day) {
+            const selectedMonth = document.getElementById("monthSelector").value;
+            localStorage.setItem('selectedDay', day);
+            localStorage.setItem('selectedMonth', selectedMonth);
+            window.location.href = `/diary?selectedMonth=${selectedMonth}&selectedDay=${day}`;
+        }
+    </script>
+</body>
+</html>
