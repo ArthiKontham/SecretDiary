@@ -1,16 +1,17 @@
+
 # Secret Diary
 
-A secure digital diary application that allows users to create, organize, and manage personal diary entries with a clean and user-friendly interface.
-
-## Features
-
-- Secure diary entries
-- Create, edit and delete notes
-- Reminder management
-- Responsive interface
-- Local data storage
-- Deployed on Vercel
+A secure digital diary application that allows users to create, edit and organize personal diary entries.
 
 ## Preview
 
 ![Secret Diary](sd.jpg)
+
+## Features
+
+- Create diary entries
+- Edit and delete entries
+- Reminders
+- Password protection
+- Responsive interface
+- Deployed on Vercel
