@@ -13,6 +13,10 @@ A Flask-based personal diary web application that allows users to securely creat
 
 ---
 
+## Live Demo
+
+🔗 [SecretDiary – Live Website](https://secretdiaryy.vercel.app/)
+
 ## 1. Project Overview
 
 Secret Diary is a web-based digital diary designed to provide users with a private and organized space to record their daily thoughts and activities.
